@@ -15,7 +15,7 @@ void Brick::Draw( Graphics & gfx ) const
 	}
 }
 
-bool Brick::doBallCollision(Ball& ball)
+bool Brick::IsBallColliding(Ball& ball)
 {
 	if ( !destroyed && rect.IsOverlappingWith(ball.GetRect()))
 	{

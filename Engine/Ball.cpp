@@ -32,21 +32,20 @@ RectF Ball::GetRect()
 	return RectF::FromCenter( pos, radius, radius);
 }
 
+Vec2 Ball::GetVel()
+{
+	return vel;
+}
+
+Vec2 Ball::GetPos()
+{
+	return pos;
+}
+
 bool Ball::IsColliding(RectF& walls)
 {
 	RectF ball = GetRect();
 	bool collided = false;
-	//if (! ball.IsOverlappingWith(walls))
-	//{
-	//	if (pos.x > 792.0f || pos.x < 7.0f)
-	//	{
-	//		vel *= -1.0f;
-	//	}
-	//	if (pos.y > 592.0f || pos.y < 7.0f)
-	//	{
-	//		vel *= -1.0f;
-	//	}
-	//}
 	if( ball.left <= walls.left )
 	{
 		pos.x += walls.left - ball.left;

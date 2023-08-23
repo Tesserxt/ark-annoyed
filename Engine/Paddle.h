@@ -19,7 +19,7 @@ public:
 private:
 	Color c = Colors::Gray;
 	Color wing_color = Colors::Cyan;
-	float wing_width = 10.0f;
+	float wing_width = 7.0f;
 	Vec2  pos;
 	float vel = 300.0f;
 	float halfwidth;

@@ -8,10 +8,12 @@
 class Brick
 {
 public:
+	Brick() = default;
 	Brick( const RectF& rect_in,Color color_in );
 	void Draw( Graphics& gfx ) const;
 	bool IsBallColliding(Ball& ball);
 private:
+	static constexpr float padding = 1.0f;
 	RectF rect;
 	Color color;
 	bool destroyed = false;

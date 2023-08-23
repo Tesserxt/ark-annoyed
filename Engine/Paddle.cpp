@@ -46,7 +46,7 @@ void Paddle::IsWallColliding( const RectF& walls)
 
 bool Paddle::IsBallColliding(Ball& ball) const
 {
-	if ( ball.GetVel().y > 0.0f && GetRect().IsOverlappingWith(ball.GetRect()))
+	if ( ball.GetPos().y < 390.0f && ball.GetVel().y > 0.0f && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
 		ball.ReboundY();
 		return true;

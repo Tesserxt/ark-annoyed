@@ -71,6 +71,7 @@ void Game::UpdateModel()
 		if (b.IsBallColliding(ball))
 		{
 			soundbrick.Play();
+			break;
 		}
 	}
 	if (pad.IsBallColliding(ball))

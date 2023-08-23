@@ -15,9 +15,24 @@ void Brick::Draw( Graphics & gfx ) const
 	}
 }
 
-bool Brick::IsBallColliding(Ball& ball)
+bool Brick::IsBallColliding(Ball& ball )
 {
-	if ( !destroyed && rect.IsOverlappingWith(ball.GetRect()))
+	RectF ballrect = ball.GetRect();
+	return SideFirstCollided(ball);
+}
+
+bool Brick::SideFirstCollided(Ball& ball)
+{
+	RectF ballrect = ball.GetRect();
+	bool horizontal = rect.top <= ballrect.top && rect.bottom >= ballrect.bottom; //checking if hitted brick horizontally( either left or right side)
+	
+	if ( horizontal && !destroyed && rect.IsOverlappingWith(ballrect)) 
+	{
+		ball.ReboundX();
+		destroyed = true;
+		return true;	
+	}
+	else //checking if hitted brick vertically( either top or bottom)
 	{
 		ball.ReboundY();
 		destroyed = true;

@@ -16,6 +16,7 @@ public:
 	void IsWallColliding( const RectF& walls);
 	bool IsBallColliding(Ball& ball) const;
 	RectF GetRect() const;
+	Vec2 GetPos();
 private:
 	Color c = Colors::Gray;
 	Color wing_color = Colors::Cyan;

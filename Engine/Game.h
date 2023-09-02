@@ -29,6 +29,9 @@
 #include "FrameTimer.h"
 #include "Sound.h"
 #include "Paddle.h"
+#include "SpriteCodex.h"
+#include "Obstacle.h"
+#include <random>
 
 class Game
 {
@@ -54,14 +57,24 @@ private:
 	static constexpr int nBricksAcross = 7;
 	static constexpr int nBricksDown = 5;
 	static constexpr int nBricks = nBricksAcross * nBricksDown;
+	static constexpr int nObstacles = 10;
+	int nBricksDestroyed = 0;
 
 	FrameTimer ft;
 	Ball ball;
 	RectF walls;
 	Sound soundpad;
 	Sound soundbrick;
+	Sound soundobstacle;
 	Brick brick[nBricks ];
 	Paddle pad;
+	Obstacle obstacle[nObstacles];
+	std::mt19937 rng;
+	std::uniform_real_distribution<float> xDist;
+	std::uniform_real_distribution<float> yDist;
+	bool GameOver = false;
+	bool GameStart = false;
+	int x = 0;
 
 	/********************************/
 };

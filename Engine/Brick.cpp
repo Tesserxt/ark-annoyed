@@ -17,15 +17,7 @@ void Brick::Draw( Graphics & gfx ) const
 
 bool Brick::IsBallColliding(Ball& ball )
 {
-	RectF ballrect = ball.GetRect();
 	return SideFirstCollided(ball);
-	//if (  !destroyed && rect.IsOverlappingWith( ballrect ))
-	//{
-	//	///ball.ReboundY();
-	//	//destroyed = true;
-	//	//return true;
-	//}
-	
 }
 
 bool Brick::SideFirstCollided(Ball& ball)
@@ -50,4 +42,9 @@ bool Brick::SideFirstCollided(Ball& ball)
 	}
 	return false;
 
+}
+
+RectF Brick::GetRect()
+{
+	return rect;
 }

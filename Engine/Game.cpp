@@ -26,11 +26,14 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(390.0f, 390.0f), Vec2(60.0f * 2, 60.0f * 3)),
+	ball(Vec2(410.0f, 530.0f),  Vec2( 60.0f * 2.0f, -60.0f * 4.0f) ),
 	walls( 0.0, float(Graphics::ScreenWidth), 0, float(Graphics::ScreenHeight) ),
-	pad( Vec2( 400.0f, 400.0f), 50.0f, 10.0f),
+	pad( Vec2( 410.0f, 550.0f), 50.0f, 10.0f),
+	rng(std::random_device()()),
+	
 	soundpad( L"Sounds\\arkpad.wav"),
-	soundbrick( L"Sounds\\arkbrick.wav")
+	soundbrick( L"Sounds\\arkbrick.wav"),
+	soundobstacle( L"Sounds\\fart1.wav")
 	
 {
 	float p = (Graphics::ScreenWidth - ( brickwidth * float(nBricksAcross) )) / 2.0f;
@@ -42,12 +45,16 @@ Game::Game( MainWindow& wnd )
 		Color c = Colors[y];
 		for (int x = 0; x < nBricksAcross; x++)
 		{
-			brick[i] =  Brick( RectF(
-						topleft + Vec2( x * brickwidth, y * brickheight),
-						brickwidth, brickheight), 
-						c);
+			Vec2 pos = topleft + Vec2(x * brickwidth, y * brickheight);
+			brick[i] =  Brick( RectF(pos, brickwidth, brickheight), c);
 			i++;
 		}
+	}
+	std::uniform_real_distribution<float> xDist( 10.0f, 790.0f);
+	std::uniform_real_distribution<float> yDist( 10.0f,15.0f );
+	for (int i = 0; i < nObstacles; i++)
+	{
+		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
 	}
 }
 
@@ -60,36 +67,92 @@ void Game::Go()
 }
 
 void Game::UpdateModel()
-{
+{	
 	float dt = ft.Mark();
-	pad.Update( wnd.kbd, dt);
-	pad.IsWallColliding(walls);
-	ball.Update(dt);
-
-	for (Brick& b : brick)
+	if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
-		if (b.IsBallColliding(ball))
-		{
-			soundbrick.Play();
-			break;
+		GameStart = true;
+	}
+	if (!GameOver && GameStart )
+	{
+		
+		pad.Update(wnd.kbd, dt);
+		pad.IsWallColliding(walls);
+		ball.Update(dt);	
+	//	for (Obstacle& o : obstacle)
+		x = nBricksDestroyed / 5;
+			//o= Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60 / 2 * 0, 60 * 3));
+		if(nBricksDestroyed < 0)
+		{ 
+			obstacle[x].Update(dt);
+			obstacle[x].IsBallColliding(ball);
+			obstacle[x].IsWallColliding(walls);	
 		}
-	}
-	if (pad.IsBallColliding(ball))
-	{
-		soundpad.Play();
-	}
-	if (ball.IsColliding(walls))
-	{
-		soundpad.Play();
+		else
+		{
+			for (Obstacle& o : obstacle)
+			{
+				o.Update(dt);
+				if (o.IsBallColliding(ball))
+				{
+					soundobstacle.Play();
+				}
+				o.IsWallColliding(walls);
+			}
+		}
+
+		for (Brick& brik : brick)
+		{
+			if (brik.IsBallColliding(ball) )
+			{
+				nBricksDestroyed ++;
+				soundbrick.Play();
+				break;
+			}
+		}
+		if (pad.IsBallColliding(ball))
+		{
+			soundpad.Play();
+		}
+		if (ball.IsColliding(walls))
+		{
+			soundpad.Play();
+		}
+		for (Obstacle& o : obstacle)
+		{
+			if (o.IsPadColliding(pad.GetRect()))
+			{
+				GameOver = true;
+			}
+		}
 	}
 }
 
 void Game::ComposeFrame()
-{	
+{
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);
 	}
+	
+	
 	pad.Draw(gfx);
 	ball.Draw(gfx);
+	if (nBricksDestroyed < 0)
+	{
+		obstacle[x].Draw(gfx);	
+	}
+	else
+	{
+		for (Obstacle& o : obstacle)
+		{
+			o.Draw(gfx);
+		}
+	}
+	if (ball.GetPos().y > pad.GetPos().y + 10.0f|| GameOver )
+	{
+		SpriteCodex::DrawGameOver(Vec2(400.0f, 300.0f), gfx);
+		if (ball.GetPos().y + 7.0f == walls.bottom)
+			GameOver = true;
+	}
 }

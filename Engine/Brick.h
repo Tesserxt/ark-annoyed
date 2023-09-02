@@ -13,10 +13,11 @@ public:
 	void Draw( Graphics& gfx ) const;
 	bool IsBallColliding(Ball& ball );
 	bool SideFirstCollided(Ball& ball);
+	RectF GetRect();
 private:
+	Vec2 pos;
 	static constexpr float padding = 1.0f;
 	RectF rect;
 	Color color;
 	bool destroyed = false;
-	int x;
 };

@@ -14,9 +14,10 @@ public:
 	void Draw(Graphics& gfx) const;
 	void Update( const Keyboard& kbd, const float dt);
 	void IsWallColliding( const RectF& walls);
-	bool IsBallColliding(Ball& ball) const;
+	bool IsBallColliding(Ball& ball);
 	RectF GetRect() const;
 	Vec2 GetPos();
+	void Resetcooldown();
 private:
 	Color c = Colors::Gray;
 	Color wing_color = Colors::Cyan;
@@ -25,5 +26,6 @@ private:
 	float vel = 300.0f;
 	float halfwidth;
 	float halfheight;
+	bool cooldown = false; 
 
 };

@@ -70,8 +70,6 @@ private:
 	Paddle pad;
 	Obstacle obstacle[nObstacles];
 	std::mt19937 rng;
-	std::uniform_real_distribution<float> xDist;
-	std::uniform_real_distribution<float> yDist;
 	bool GameOver = false;
 	bool GameStart = false;
 	int x = 0;

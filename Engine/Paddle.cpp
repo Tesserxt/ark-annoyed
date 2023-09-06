@@ -1,5 +1,5 @@
 #include "Paddle.h"
-
+#include <iostream>
 Paddle::Paddle( Vec2& in_pos, float in_halfwidth, float in_halfheight)
 	:
 	pos(in_pos),
@@ -44,11 +44,26 @@ void Paddle::IsWallColliding( const RectF& walls)
 	}	
 }
 
-bool Paddle::IsBallColliding(Ball& ball) const
+bool Paddle::IsBallColliding(Ball& ball)
 {
-	if (ball.GetVel().y > 0.0f && GetRect().IsOverlappingWith(ball.GetRect()))
+	if (!cooldown && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
-		ball.ReboundY();
+		if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x))
+		{
+			ball.ReboundY();
+			ball.SetvelX();
+		}
+		else if (ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)	
+		{
+			
+			ball.ReboundY();
+			ball.SetvelX();
+		}
+		else
+		{
+			ball.ReboundX();
+		}
+		cooldown = true;
 		return true;
 	}
 	return false;
@@ -62,4 +77,9 @@ RectF Paddle::GetRect() const
 Vec2 Paddle::GetPos()
 {
 	return pos;
+}
+
+void Paddle::Resetcooldown()
+{
+	cooldown = false;
 }

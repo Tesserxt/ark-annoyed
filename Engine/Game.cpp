@@ -82,7 +82,7 @@ void Game::UpdateModel()
 	//	for (Obstacle& o : obstacle)
 		x = nBricksDestroyed / 5;
 			//o= Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60 / 2 * 0, 60 * 3));
-		if(nBricksDestroyed < 0)
+		if(nBricksDestroyed < 30)
 		{ 
 			obstacle[x].Update(dt);
 			obstacle[x].IsBallColliding(ball);
@@ -107,6 +107,7 @@ void Game::UpdateModel()
 			{
 				nBricksDestroyed ++;
 				soundbrick.Play();
+				pad.Resetcooldown();
 				break;
 			}
 		}
@@ -116,13 +117,14 @@ void Game::UpdateModel()
 		}
 		if (ball.IsColliding(walls))
 		{
+			pad.Resetcooldown();
 			soundpad.Play();
 		}
 		for (Obstacle& o : obstacle)
 		{
 			if (o.IsPadColliding(pad.GetRect()))
 			{
-				GameOver = true;
+				//GameOver = true;
 			}
 		}
 	}
@@ -138,7 +140,7 @@ void Game::ComposeFrame()
 	
 	pad.Draw(gfx);
 	ball.Draw(gfx);
-	if (nBricksDestroyed < 0)
+	if (nBricksDestroyed < 30)
 	{
 		obstacle[x].Draw(gfx);	
 	}

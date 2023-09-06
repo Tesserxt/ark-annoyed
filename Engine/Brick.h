@@ -12,7 +12,6 @@ public:
 	Brick( const RectF& rect_in,Color color_in );
 	void Draw( Graphics& gfx ) const;
 	bool IsBallColliding(Ball& ball );
-	bool SideFirstCollided(Ball& ball);
 	RectF GetRect();
 private:
 	Vec2 pos;

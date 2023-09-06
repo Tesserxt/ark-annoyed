@@ -17,31 +17,24 @@ void Brick::Draw( Graphics & gfx ) const
 
 bool Brick::IsBallColliding(Ball& ball )
 {
-	return SideFirstCollided(ball);
-}
-
-bool Brick::SideFirstCollided(Ball& ball)
-{
-	RectF ballrect = ball.GetRect();
-	bool horizontal = rect.top <= ballrect.top && rect.bottom >= ballrect.bottom;
-	
-	if ( horizontal && !destroyed && rect.IsOverlappingWith(ballrect)) //for x
+	if (!destroyed && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
-		ball.ReboundX();
-		destroyed = true;
-		return true;	
-	}
-
-	bool vertical = rect.left <= ballrect.left && rect.right >= ballrect.right;
-
-	if ( vertical && !destroyed && rect.IsOverlappingWith(ballrect)) //for y
-	{
-		ball.ReboundY();
+		if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x))
+		{
+			ball.ReboundY();
+		}
+		else if (ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)
+		{
+			ball.ReboundY();
+		}
+		else
+		{
+			ball.ReboundX();
+		}
 		destroyed = true;
 		return true;
 	}
 	return false;
-
 }
 
 RectF Brick::GetRect()

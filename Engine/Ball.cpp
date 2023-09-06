@@ -3,7 +3,8 @@
 Ball::Ball(Vec2& in_pos, Vec2& in_vel)
 	:
 	pos(in_pos),
-	vel(in_vel)
+	vel(in_vel),
+	xDist(-2.0f, 2.0f)
 {
 }
 
@@ -20,6 +21,11 @@ void Ball::Draw(Graphics& gfx)
 void Ball::ReboundX()
 {
 	vel.x = -vel.x;
+}
+
+void Ball::SetvelX()
+{
+	vel.x = xDist(rng) * 60.0f;
 }
 
 void Ball::ReboundY()

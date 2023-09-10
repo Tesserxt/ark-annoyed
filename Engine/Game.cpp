@@ -26,9 +26,9 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 530.0f),  Vec2( 60.0f * 2.0f, -60.0f * 4.0f) ),
-	walls( 0.0, float(Graphics::ScreenWidth), 0, float(Graphics::ScreenHeight) ),
-	pad( Vec2( 410.0f, 550.0f), 50.0f, 10.0f),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 60.0f * 4.0f, -60.0f * 4.0f) ),
+	walls( 100, float(25 * 28), 24, float( 24 * 24) ),
+	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
 	
 	soundpad( L"Sounds\\arkpad.wav"),
@@ -36,8 +36,7 @@ Game::Game( MainWindow& wnd )
 	soundobstacle( L"Sounds\\fart1.wav")
 	
 {
-	float p = (Graphics::ScreenWidth - ( brickwidth * float(nBricksAcross) )) / 2.0f;
-	Vec2  topleft(p, brickheight );
+	Vec2  topleft(topleftX, brickheight );
 	Color Colors[nBricksDown] = { Colors::Red, Colors::Green, Colors::Blue,Colors::Yellow, Colors::Cyan };
 	int i = 0;
 	for (int y = 0; y < nBricksDown; y++)
@@ -50,8 +49,8 @@ Game::Game( MainWindow& wnd )
 			i++;
 		}
 	}
-	std::uniform_real_distribution<float> xDist( 10.0f, 790.0f);
-	std::uniform_real_distribution<float> yDist( 10.0f,15.0f );
+	std::uniform_real_distribution<float> xDist( topleftX + 50, 25*25);
+	std::uniform_real_distribution<float> yDist( 30.0f, 35.0f );
 	for (int i = 0; i < nObstacles; i++)
 	{
 		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
@@ -124,7 +123,7 @@ void Game::UpdateModel()
 		{
 			if (o.IsPadColliding(pad.GetRect()))
 			{
-				//GameOver = true;
+				GameOver = true;
 			}
 		}
 	}
@@ -132,6 +131,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	SpriteCodex::DrawPooBoard( Vec2(topleftX - 100 ,0), 25, gfx);
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);
@@ -151,7 +151,7 @@ void Game::ComposeFrame()
 			o.Draw(gfx);
 		}
 	}
-	if (ball.GetPos().y > pad.GetPos().y + 10.0f|| GameOver )
+	if (ball.GetPos().y > pad.GetPos().y + 10.0f || GameOver )
 	{
 		SpriteCodex::DrawGameOver(Vec2(400.0f, 300.0f), gfx);
 		if (ball.GetPos().y + 7.0f == walls.bottom)

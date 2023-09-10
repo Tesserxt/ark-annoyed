@@ -52,7 +52,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	
-	float brickwidth  =  85.0f;
+	float brickwidth  =  65.0f;
 	float brickheight =  30.0f;
 	static constexpr int nBricksAcross = 7;
 	static constexpr int nBricksDown = 5;
@@ -73,6 +73,7 @@ private:
 	bool GameOver = false;
 	bool GameStart = false;
 	int x = 0;
+	float topleftX = (Graphics::ScreenWidth - (brickwidth * float(nBricksAcross))) / 2.0f;
 
 	/********************************/
 };

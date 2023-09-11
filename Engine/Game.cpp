@@ -75,14 +75,12 @@ void Game::UpdateModel()
 		GameStart = true;
 	}
 	if (!GameOver && GameStart )
-	{
-		
+	{	
 		pad.Update(wnd.kbd, dt);
 		pad.IsWallColliding(walls);
 		ball.Update(dt);	
-	//	for (Obstacle& o : obstacle)
 		x = nBricksDestroyed / 5;
-			//o= Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60 / 2 * 0, 60 * 3));
+
 		if(nBricksDestroyed < 30)
 		{ 
 			obstacle[x].Update(dt);
@@ -130,7 +128,6 @@ void Game::UpdateModel()
 			}
 			else
 			{	
-				
 				pad.Resetcooldown();
 				soundpad.Play();
 			}

@@ -27,7 +27,7 @@ bool Brick::IsBallColliding(Ball& ball )
 		{
 			ball.ReboundY();
 		}
-		else
+		else if (ball.GetPos().y <= GetRect().top && ball.GetPos().y >= GetRect().bottom)
 		{
 			ball.ReboundX();
 		}

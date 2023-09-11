@@ -33,6 +33,15 @@ void Ball::ReboundY()
 	vel.y = -vel.y;
 }
 
+bool Ball::isGameOver(RectF& walls, int& lives)
+{
+	if (GetPos().y + 7.0f == walls.bottom)
+	{
+		lives--;
+		return lives == 0;
+	}
+}
+
 RectF Ball::GetRect()
 {
 	return RectF::FromCenter( pos, radius, radius);

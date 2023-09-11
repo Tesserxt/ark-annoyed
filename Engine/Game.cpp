@@ -26,14 +26,16 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 480.0f),  Vec2( 60.0f * 4.0f, -60.0f * 4.0f) ),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 4.0f) ),
 	walls( 100, float(25 * 28), 24, float( 24 * 24) ),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
 	
 	soundpad( L"Sounds\\arkpad.wav"),
 	soundbrick( L"Sounds\\arkbrick.wav"),
-	soundobstacle( L"Sounds\\fart1.wav")
+	soundobstacle( L"Sounds\\fart1.wav"),
+	soundgameover( L"Sounds\\gameover01.wav"),
+	soundObstacle( L"Sounds\\obstacle.wav")
 	
 {
 	Vec2  topleft(topleftX, brickheight );
@@ -94,7 +96,7 @@ void Game::UpdateModel()
 				o.Update(dt);
 				if (o.IsBallColliding(ball))
 				{
-					soundobstacle.Play();
+					soundObstacle.Play();
 				}
 				o.IsWallColliding(walls);
 			}
@@ -116,13 +118,27 @@ void Game::UpdateModel()
 		}
 		if (ball.IsColliding(walls))
 		{
-			pad.Resetcooldown();
-			soundpad.Play();
+			
+			GameOver = ball.isGameOver(walls, lives);
+			if (ball.GetPos().y + 7.0f == walls.bottom)
+			{
+				soundgameover.Play();
+				GameStart = false;
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * 4.0f));
+				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
+
+			}
+			else
+			{	
+				
+				pad.Resetcooldown();
+				soundpad.Play();
+			}
 		}
 		for (Obstacle& o : obstacle)
 		{
 			if (o.IsPadColliding(pad.GetRect()))
-			{
+			{	
 				GameOver = true;
 			}
 		}
@@ -137,9 +153,12 @@ void Game::ComposeFrame()
 		b.Draw(gfx);
 	}
 	
-	
-	pad.Draw(gfx);
-	ball.Draw(gfx);
+	if (GameStart)
+	{
+		pad.Draw(gfx);
+		ball.Draw(gfx);
+	}
+
 	if (nBricksDestroyed < 30)
 	{
 		obstacle[x].Draw(gfx);	
@@ -151,10 +170,13 @@ void Game::ComposeFrame()
 			o.Draw(gfx);
 		}
 	}
-	if (ball.GetPos().y > pad.GetPos().y + 10.0f || GameOver )
+	for( int i = 1; i <= lives; i++)
+	{
+		SpriteCodex::DrawBall(Vec2( 15 * i, 10), gfx);
+	}
+	if (GameOver)
 	{
 		SpriteCodex::DrawGameOver(Vec2(400.0f, 300.0f), gfx);
-		if (ball.GetPos().y + 7.0f == walls.bottom)
-			GameOver = true;
 	}
+	
 }

@@ -15,6 +15,7 @@ public:
 	void ReboundX();
 	void SetvelX();
 	void ReboundY();
+	bool isGameOver(RectF& walls, int& lives);
 	RectF GetRect();
 	Vec2 GetVel();
 	Vec2 GetPos();

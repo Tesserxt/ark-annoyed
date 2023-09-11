@@ -17,7 +17,7 @@ public:
 	bool IsBallColliding(Ball& ball);
 	RectF GetRect() const;
 	Vec2 GetPos();
-	void Resetcooldown();
+	void ResetCoolDown();
 private:
 	Color c = Colors::Gray;
 	Color wing_color = Colors::Cyan;

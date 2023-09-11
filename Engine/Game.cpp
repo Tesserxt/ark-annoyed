@@ -76,6 +76,40 @@ void Game::UpdateModel()
 	}
 	if (!GameOver && GameStart )
 	{	
+		bool collisionHappend = false;
+		float curColDistSq;
+		int curColIndex;
+
+		for (int i = 0; i < nBricks; i++)
+		{
+			if (brick[i].IsBallColliding(ball))
+			{
+				float newColDistSq = (ball.GetPos() - brick[i].GetCenter()).GetLengthSq();
+				if (collisionHappend)
+				{
+					if (newColDistSq < curColDistSq)
+					{
+						curColDistSq = newColDistSq;
+						curColIndex = i;
+					}
+				}
+				else
+				{
+					curColDistSq = newColDistSq;
+					curColIndex = i;
+					collisionHappend = true;
+				}
+			}
+		}
+
+		if (collisionHappend)
+		{
+			nBricksDestroyed++;
+			pad.ResetCoolDown();
+			brick[curColIndex].ExecuteBallColliding(ball);
+			soundbrick.Play();
+		}
+
 		pad.Update(wnd.kbd, dt);
 		pad.IsWallColliding(walls);
 		ball.Update(dt);	
@@ -100,23 +134,12 @@ void Game::UpdateModel()
 			}
 		}
 
-		for (Brick& brik : brick)
-		{
-			if (brik.IsBallColliding(ball) )
-			{
-				nBricksDestroyed ++;
-				soundbrick.Play();
-				pad.Resetcooldown();
-				break;
-			}
-		}
 		if (pad.IsBallColliding(ball))
 		{
 			soundpad.Play();
 		}
 		if (ball.IsColliding(walls))
 		{
-			
 			GameOver = ball.isGameOver(walls, lives);
 			if (ball.GetPos().y + 7.0f == walls.bottom)
 			{
@@ -128,13 +151,13 @@ void Game::UpdateModel()
 			}
 			else
 			{	
-				pad.Resetcooldown();
+				pad.ResetCoolDown();
 				soundpad.Play();
 			}
 		}
 		for (Obstacle& o : obstacle)
 		{
-			if (o.IsPadColliding(pad.GetRect()))
+			if (o.IsPadColliding(pad.GetRect()) || nBricksDestroyed == nBricks )
 			{	
 				GameOver = true;
 			}

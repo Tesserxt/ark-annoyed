@@ -1,4 +1,5 @@
 #include "Brick.h"
+#include <assert.h>
 
 Brick::Brick( const RectF & rect_in,Color color_in )
 	:
@@ -17,27 +18,34 @@ void Brick::Draw( Graphics & gfx ) const
 
 bool Brick::IsBallColliding(Ball& ball )
 {
-	if (!destroyed && GetRect().IsOverlappingWith(ball.GetRect()))
+	return (!destroyed && GetRect().IsOverlappingWith(ball.GetRect()));
+}
+
+void Brick::ExecuteBallColliding(Ball& ball)
+{
+	assert( !destroyed && GetRect().IsOverlappingWith( ball.GetRect() ));
+
+	if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x))
 	{
-		if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x))
-		{
-			ball.ReboundY();
-		}
-		else if (ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)
-		{
-			ball.ReboundY();
-		}
-		else if (ball.GetPos().y <= GetRect().top && ball.GetPos().y >= GetRect().bottom)
-		{
-			ball.ReboundX();
-		}
-		destroyed = true;
-		return true;
+		ball.ReboundY();
 	}
-	return false;
+	else if (ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)
+	{
+		ball.ReboundY();
+	}
+	else
+	{
+		ball.ReboundX();
+	}
+	destroyed = true;
 }
 
 RectF Brick::GetRect()
 {
 	return rect;
+}
+
+Vec2 Brick::GetCenter()
+{
+	return rect.GetCenter();
 }

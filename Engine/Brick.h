@@ -12,7 +12,9 @@ public:
 	Brick( const RectF& rect_in,Color color_in );
 	void Draw( Graphics& gfx ) const;
 	bool IsBallColliding(Ball& ball );
+	void ExecuteBallColliding(Ball& ball);
 	RectF GetRect();
+	Vec2 GetCenter();
 private:
 	Vec2 pos;
 	static constexpr float padding = 1.0f;

@@ -79,7 +79,7 @@ Vec2 Paddle::GetPos()
 	return pos;
 }
 
-void Paddle::Resetcooldown()
+void Paddle::ResetCoolDown()
 {
 	cooldown = false;
 }

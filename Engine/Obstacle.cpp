@@ -79,10 +79,16 @@ bool Obstacle::IsWallColliding(RectF& walls)
 
 bool Obstacle::IsPadColliding(RectF& pad)
 {
-	return GetRect().IsOverlappingWith(pad);
+	if (!destroyed)
+	{
+		return GetRect().IsOverlappingWith(pad);
+	}
+	return false;
+
 }
 
 void Obstacle::Rebound(float rate)
 {
-	vel.y = vel.y * rate;
+	if (!destroyed)
+		vel.y = vel.y * rate;
 }

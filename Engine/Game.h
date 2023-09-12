@@ -76,7 +76,7 @@ private:
 	bool GameOver = false;
 	bool GameStart = false;
 	int x = 0;
-	int lives = 3;
+	int lives = 30;
 	float topleftX = (Graphics::ScreenWidth - (brickwidth * float(nBricksAcross))) / 2.0f;
 
 	/********************************/

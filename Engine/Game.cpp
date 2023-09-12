@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 6.0f) ),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 1.0f) ),
 	walls( 100, float(25 * 28), 24, float( 24 * 24) ),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
@@ -38,7 +38,7 @@ Game::Game( MainWindow& wnd )
 	soundObstacle( L"Sounds\\obstacle.wav")
 	
 {
-	Vec2  topleft(topleftX, brickheight );
+	Vec2  topleft(topleftX, 50 );
 	Color Colors[nBricksDown] = { Colors::Red, Colors::Green, Colors::Blue,Colors::Yellow, Colors::Cyan };
 	int i = 0;
 	for (int y = 0; y < nBricksDown; y++)
@@ -51,8 +51,8 @@ Game::Game( MainWindow& wnd )
 			i++;
 		}
 	}
-	std::uniform_real_distribution<float> xDist( 125, 600 );
-	std::uniform_real_distribution<float> yDist( 30.0f, 50.0f );
+	std::uniform_real_distribution<float> xDist( 150.0f, 550.0f );
+	std::uniform_real_distribution<float> yDist( 50.0f, 75.0f );
 	for (int i = 0; i < nObstacles; i++)
 	{
 		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
@@ -119,28 +119,30 @@ void Game::UpdateModel( float dt )
 		pad.Update(wnd.kbd, dt);
 		pad.IsWallColliding(walls);
 		ball.Update(dt);	
-		x = nBricksDestroyed / 5;
-
-		if(nBricksDestroyed < 30)
-		{ 
-			obstacle[x].Update(dt);
-			obstacle[x].IsBallColliding(ball);
-			obstacle[x].IsWallColliding(walls);	
-		}
-		else
+		int i = x;
+		if( i == x )
 		{
-			for (Obstacle& o : obstacle)
-			{
-				o.Update(dt);
-				if (o.IsBallColliding(ball))
-				{
-					soundObstacle.Play();
-					pad.ResetCoolDown();
-				}
-				o.IsWallColliding(walls);
+			obstacle[i].Update(dt);
+			if (obstacle[i].IsBallColliding(ball))
+			{	
+				pad.ResetCoolDown();
 			}
-		}
-
+			if (obstacle[x].IsWallColliding(walls))
+			{
+				x++;
+			}
+			if (obstacle[x].IsPadColliding(pad.GetRect()) || nBricksDestroyed == nBricks)
+			{
+				soundgameover.Play();
+				obstacle[x].destroyed = true;
+				GameStart = false;
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2(0, -60.0f * 6.0f));
+				pad = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
+				lives--;
+			}
+			i++;
+		}		
+		
 		if (pad.IsBallColliding(ball))
 		{
 			soundpad.Play();
@@ -154,19 +156,11 @@ void Game::UpdateModel( float dt )
 				GameStart = false;
 				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * 6.0f));
 				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
-
 			}
 			else
 			{	
 				pad.ResetCoolDown();
 				soundpad.Play();
-			}
-		}
-		for (Obstacle& o : obstacle)
-		{
-			if (o.IsPadColliding(pad.GetRect()) || nBricksDestroyed == nBricks )
-			{	
-				GameOver = true;
 			}
 		}
 	}
@@ -186,17 +180,8 @@ void Game::ComposeFrame()
 		ball.Draw(gfx);
 	}
 
-	if (nBricksDestroyed < 30)
-	{
-		obstacle[x].Draw(gfx);	
-	}
-	else
-	{
-		for (Obstacle& o : obstacle)
-		{
-			o.Draw(gfx);
-		}
-	}
+	obstacle[x].Draw(gfx);
+	
 	for( int i = 1; i <= lives; i++)
 	{
 		SpriteCodex::DrawBall(Vec2( 15 * i, 10), gfx);

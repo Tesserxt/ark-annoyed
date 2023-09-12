@@ -40,6 +40,7 @@ bool Ball::isGameOver(RectF& walls, int& lives)
 		lives--;
 		return lives == 0;
 	}
+	return false;
 }
 
 RectF Ball::GetRect()

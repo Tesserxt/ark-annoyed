@@ -42,7 +42,7 @@ public:
 	void Go();
 private:
 	void ComposeFrame();
-	void UpdateModel();
+	void UpdateModel( float dt);
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -54,7 +54,7 @@ private:
 	
 	float brickwidth  =  65.0f;
 	float brickheight =  30.0f;
-	static constexpr int nBricksAcross = 2;
+	static constexpr int nBricksAcross = 7;
 	static constexpr int nBricksDown = 5;
 	static constexpr int nBricks = nBricksAcross * nBricksDown;
 	static constexpr int nObstacles = 10;
@@ -63,14 +63,15 @@ private:
 	FrameTimer ft;
 	Ball ball;
 	RectF walls;
+	Brick brick[nBricks];
+	Paddle pad;
+	Obstacle obstacle[nObstacles];
 	Sound soundpad;
 	Sound soundbrick;
 	Sound soundobstacle;
 	Sound soundgameover;
 	Sound soundObstacle;
-	Brick brick[nBricks ];
-	Paddle pad;
-	Obstacle obstacle[nObstacles];
+
 	std::mt19937 rng;
 	bool GameOver = false;
 	bool GameStart = false;

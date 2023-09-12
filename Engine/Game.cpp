@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 4.0f) ),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 6.0f) ),
 	walls( 100, float(25 * 28), 24, float( 24 * 24) ),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
@@ -51,8 +51,8 @@ Game::Game( MainWindow& wnd )
 			i++;
 		}
 	}
-	std::uniform_real_distribution<float> xDist( topleftX + 50, 25*25);
-	std::uniform_real_distribution<float> yDist( 30.0f, 35.0f );
+	std::uniform_real_distribution<float> xDist( 125, 600 );
+	std::uniform_real_distribution<float> yDist( 30.0f, 50.0f );
 	for (int i = 0; i < nObstacles; i++)
 	{
 		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
@@ -61,15 +61,21 @@ Game::Game( MainWindow& wnd )
 
 void Game::Go()
 {
-	gfx.BeginFrame();	
-	UpdateModel();
+	gfx.BeginFrame();
+	float elapsedTime = ft.Mark();
+	while (elapsedTime > 0.0f)
+	{
+		float dt = std::min(0.0025f, elapsedTime);
+		UpdateModel(dt);
+		elapsedTime -= dt;
+	}
+
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel( float dt )
 {	
-	float dt = ft.Mark();
 	if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
 		GameStart = true;
@@ -129,6 +135,7 @@ void Game::UpdateModel()
 				if (o.IsBallColliding(ball))
 				{
 					soundObstacle.Play();
+					pad.ResetCoolDown();
 				}
 				o.IsWallColliding(walls);
 			}
@@ -145,7 +152,7 @@ void Game::UpdateModel()
 			{
 				soundgameover.Play();
 				GameStart = false;
-				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * 4.0f));
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * 6.0f));
 				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
 
 			}
@@ -173,7 +180,7 @@ void Game::ComposeFrame()
 		b.Draw(gfx);
 	}
 	
-	if (GameStart)
+	if (GameStart && lives > 0 && !GameOver)
 	{
 		pad.Draw(gfx);
 		ball.Draw(gfx);

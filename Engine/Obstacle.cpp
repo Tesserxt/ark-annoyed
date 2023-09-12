@@ -29,23 +29,25 @@ bool Obstacle::IsBallColliding(Ball& Ball)
 
 	RectF face = GetRect();
 	RectF ball = Ball.GetRect();
-	if (!destroyed && GetRect().IsOverlappingWith(Ball.GetRect()));
-	bool horizontal = face.top <= ball.top && face.bottom >= ball.bottom;
-	
-	if ( horizontal && !destroyed && ball.IsOverlappingWith( face )) //for x
+	if (!destroyed && GetRect().IsOverlappingWith(Ball.GetRect()))
 	{
-		Rebound(-1.1f);
-		Ball.ReboundY();
-		return true;	
-	}
+		bool horizontal = face.top <= ball.top && face.bottom >= ball.bottom;
+		bool vertical = face.left <= ball.left && face.right >= ball.right;
 
-	bool vertical = face.left <= ball.left && face.right >= ball.right;
+		if (horizontal && !destroyed && ball.IsOverlappingWith(face)) //for x
+		{
+			Rebound(-1.1f);
+			Ball.ReboundY();
+			return true;
+		}
 
-	if ( vertical && !destroyed && ball.IsOverlappingWith( face )) //for y
-	{
-		Rebound(-1.0f);
-		Ball.ReboundX();
-		return true;
+		else //for y
+		{
+			Rebound(-1.0f);
+			Ball.ReboundX();
+			return true;
+		}
+
 	}
 	return false;
 }
@@ -79,8 +81,6 @@ bool Obstacle::IsPadColliding(RectF& pad)
 {
 	return GetRect().IsOverlappingWith(pad);
 }
-
-
 
 void Obstacle::Rebound(float rate)
 {

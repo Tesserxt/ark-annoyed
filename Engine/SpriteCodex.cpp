@@ -2813,18 +2813,19 @@ void SpriteCodex::DrawFace(const Vec2& center, Graphics& gfx)
 
 }
 
-void SpriteCodex::DrawPooBoard(const Vec2& topLeft, const int width, Graphics& gfx)
+void SpriteCodex::DrawPooBoard( const int x, const int width, Graphics& gfx)
 {
-	int height = 24;
-	for (int y = 0; y <= height; y++)
+	Vec2 topleft( Vec2(x, 0 ));
+	int dim = 24;
+	for (int y = 0; y <= dim; y++)
 	{
 		for (int x = 0; x <= width; x++)
 		{
-			if( x > 0 && x < width && y > 0 && y < height )
+			if( x > 0 && x < width && y > 0 && y < dim )
 			{ }
 			else
 			{
-				Vec2 pos = topLeft + Vec2(width * x, height * y);
+				Vec2 pos = topleft + Vec2(dim * x, dim * y);
 				DrawPoo(pos, gfx);
 			}
 		}	

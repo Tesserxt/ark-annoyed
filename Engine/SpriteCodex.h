@@ -11,6 +11,6 @@ public:
 	static void DrawGameOver(const Vec2& center, Graphics& gfx);
 	static void DrawPoo(const Vec2& center, Graphics& gfx);
 	static void DrawFace(const Vec2& center, Graphics& gfx);
-	static void DrawPooBoard(const Vec2& topLeft, const int width, Graphics& gfx);
+	static void DrawPooBoard(const int x, const int width, Graphics& gfx);
 	static void DrawTitleScreen(int x, int y, Graphics& gfx);
 };

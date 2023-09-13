@@ -26,8 +26,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * 1.0f) ),
-	walls( 100, float(25 * 28), 24, float( 24 * 24) ),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * BallSpeed) ),
+	walls( brdx + dim, brdx + dim*brdwidth, dim, dim*dim ),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
 	
@@ -51,7 +51,7 @@ Game::Game( MainWindow& wnd )
 			i++;
 		}
 	}
-	std::uniform_real_distribution<float> xDist( 150.0f, 550.0f );
+	std::uniform_real_distribution<float> xDist( 235.0f, 500.0f );
 	std::uniform_real_distribution<float> yDist( 50.0f, 75.0f );
 	for (int i = 0; i < nObstacles; i++)
 	{
@@ -80,7 +80,7 @@ void Game::UpdateModel( float dt )
 	{
 		GameStart = true;
 	}
-	if (!GameOver && GameStart )
+	if (!GameOver && GameStart && !(nBricksDestroyed == nBricks) )
 	{	
 		bool collisionHappend = false;
 		float curColDistSq;
@@ -122,8 +122,8 @@ void Game::UpdateModel( float dt )
 		int i = x;
 		if( i == x )
 		{
-			obstacle[i].Update(dt);
-			if (obstacle[i].IsBallColliding(ball))
+			obstacle[x].Update(dt);
+			if (obstacle[x].IsBallColliding(ball))
 			{	
 				pad.ResetCoolDown();
 			}
@@ -131,14 +131,15 @@ void Game::UpdateModel( float dt )
 			{
 				x++;
 			}
-			if (obstacle[x].IsPadColliding(pad.GetRect()) || nBricksDestroyed == nBricks)
+			if (obstacle[x].IsPadColliding(pad.GetRect()))
 			{
 				soundgameover.Play();
 				obstacle[x].destroyed = true;
 				GameStart = false;
-				ball = Ball(Vec2(410.0f, 480.0f), Vec2(0, -60.0f * 6.0f));
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2(0, -60.0f * BallSpeed));
 				pad = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
 				lives--;
+				x++;
 			}
 			i++;
 		}		
@@ -154,7 +155,7 @@ void Game::UpdateModel( float dt )
 			{
 				soundgameover.Play();
 				GameStart = false;
-				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * 6.0f));
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * BallSpeed));
 				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
 			}
 			else
@@ -168,7 +169,7 @@ void Game::UpdateModel( float dt )
 
 void Game::ComposeFrame()
 {
-	SpriteCodex::DrawPooBoard( Vec2(topleftX - 100 ,0), 25, gfx);
+	SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);

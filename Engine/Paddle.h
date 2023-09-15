@@ -26,6 +26,8 @@ private:
 	float vel = 300.0f;
 	float halfwidth;
 	float halfheight;
+	float exitXfactor = 0.0045;
+	float fixedZoneHalfwidth = 15.0f;
 	bool cooldown = false; 
 
 };

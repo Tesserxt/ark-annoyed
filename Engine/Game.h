@@ -52,19 +52,18 @@ private:
 	/********************************/
 	/*  User Variables              */
 	
-	float brickwidth  =  20.0f;
-	float brickheight =  30.0f;
+	float brickwidth  =  45.0f;
+	float brickheight =  20.0f;
 	static constexpr int nBricksAcross = 7;
 	static constexpr int nBricksDown = 5;
 	static constexpr int nBricks = nBricksAcross * nBricksDown;
-	static constexpr int nObstacles = 2;
+	static constexpr int nObstacles = 10;
 	int nBricksDestroyed = 0;
-	float BallSpeed = 8.0f;
 
 	float dim = 24.0f; // poo dimension 24*24
 	float brdx = 208.0f;
 	float brdwidth = 15.0f;
-	float brd = brdx + + brdx + dim;
+	float brd = brdx + (dim*brdwidth) + brdx + dim;
 	float topleftX = (brd - (brickwidth * float(nBricksAcross))) / 2.0f;
 
 	FrameTimer ft;

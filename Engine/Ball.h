@@ -8,7 +8,7 @@
 class Ball
 {
 public:
-	Ball(Vec2& in_pos, Vec2& in_vel);
+	Ball(Vec2& in_pos, Vec2& in_dir);
 	void Update( float dt );
 	void Draw( Graphics& gfx );
 	bool IsColliding(RectF& walls);
@@ -19,8 +19,10 @@ public:
 	RectF GetRect();
 	Vec2 GetVel();
 	Vec2 GetPos();
+	void SetDirection(Vec2& dir);
 private:
 	static constexpr float radius = 7.0f;
+	static constexpr float speed  = 400.0f;
 	Vec2 pos;
 	Vec2 vel;
 	std::mt19937 rng;

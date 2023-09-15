@@ -1,11 +1,11 @@
 #include "Ball.h"
 
-Ball::Ball(Vec2& in_pos, Vec2& in_vel)
+Ball::Ball(Vec2& in_pos, Vec2& in_dir)
 	:
 	pos(in_pos),
-	vel(in_vel),
 	xDist(-2.0f, 2.0f)
 {
+	SetDirection(in_dir);
 }
 
 void Ball::Update(float dt)
@@ -35,7 +35,7 @@ void Ball::ReboundY()
 
 bool Ball::isGameOver(RectF& walls, int& lives)
 {
-	if (GetPos().y + 7.0f == walls.bottom)
+	if (GetPos().y + 7.0f >= walls.bottom)
 	{
 		lives--;
 		return lives == 0;
@@ -56,6 +56,11 @@ Vec2 Ball::GetVel()
 Vec2 Ball::GetPos()
 {
 	return pos;
+}
+
+void Ball::SetDirection(Vec2& dir)
+{
+	vel = dir.GetNormalized() * speed;
 }
 
 bool Ball::IsColliding(RectF& walls)

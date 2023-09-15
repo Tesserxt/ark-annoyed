@@ -48,20 +48,38 @@ bool Paddle::IsBallColliding(Ball& ball)
 {
 	if (!cooldown && GetRect().IsOverlappingWith(ball.GetRect()))
 	{
-		if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x))
+		if (std::signbit(ball.GetVel().x) == std::signbit(ball.GetPos().x - pos.x) ||
+			ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)
 		{
 			ball.ReboundY();
-			ball.SetvelX();
-		}
-		else if (ball.GetPos().x <= GetRect().right && ball.GetPos().x >= GetRect().left)	
-		{
+			const float xdiff = ball.GetPos().x - pos.x;
+			float fixedXcomponent = fixedZoneHalfwidth * exitXfactor;
+			Vec2 dir;
+			if (std::abs(xdiff) < fixedZoneHalfwidth)
+			{
+				if (xdiff < 0.0f)
+				{
+					dir = Vec2( -fixedXcomponent, -10.0f );
+				}
+				else
+				{
+					dir = Vec2( fixedXcomponent,  -10.0f );
+				}
+			}
+			else
+			{
+				dir = Vec2( xdiff * exitXfactor, -10.0f );
+			}
 			
-			ball.ReboundY();
-			ball.SetvelX();
+			ball.SetDirection( dir );
+			
+			
+			//ball.SetvelX();
 		}
 		else
 		{
 			ball.ReboundX();
+			
 		}
 		cooldown = true;
 		return true;

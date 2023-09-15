@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -60.0f * BallSpeed) ),
+	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -1.0f) ),
 	walls( brdx + dim, brdx + dim*brdwidth, dim, dim*dim ),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
@@ -34,7 +34,7 @@ Game::Game( MainWindow& wnd )
 	soundpad( L"Sounds\\arkpad.wav"),
 	soundbrick( L"Sounds\\arkbrick.wav"),
 	soundobstacle( L"Sounds\\fart1.wav"),
-	soundgameover( L"Sounds\\gameover01.wav"),
+	soundgameover( L"Sounds\\arkGameOver.wav"),
 	soundObstacle( L"Sounds\\obstacle.wav")
 	
 {
@@ -52,7 +52,7 @@ Game::Game( MainWindow& wnd )
 		}
 	}
 	std::uniform_real_distribution<float> xDist( 235.0f, 500.0f );
-	std::uniform_real_distribution<float> yDist( 50.0f, 75.0f );
+	std::uniform_real_distribution<float> yDist( 30.0f,  60.0f  );
 	for (int i = 0; i < nObstacles; i++)
 	{
 		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
@@ -76,6 +76,8 @@ void Game::Go()
 
 void Game::UpdateModel( float dt )
 {	
+	Vec2 a(50,-1);
+	a.Normalize();
 	if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
 		GameStart = true;
@@ -136,7 +138,7 @@ void Game::UpdateModel( float dt )
 				soundgameover.Play();
 				obstacle[x].destroyed = true;
 				GameStart = false;
-				ball = Ball(Vec2(410.0f, 480.0f), Vec2(0, -60.0f * BallSpeed));
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2(0, -1.0f ));
 				pad = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
 				lives--;
 				x++;
@@ -151,11 +153,11 @@ void Game::UpdateModel( float dt )
 		if (ball.IsColliding(walls))
 		{
 			GameOver = ball.isGameOver(walls, lives);
-			if (ball.GetPos().y + 7.0f == walls.bottom)
+			if (ball.GetPos().y + 7.0f >= walls.bottom)
 			{
 				soundgameover.Play();
 				GameStart = false;
-				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -60.0f * BallSpeed));
+				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -1.0f ));
 				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
 			}
 			else

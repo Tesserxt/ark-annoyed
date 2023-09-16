@@ -71,7 +71,7 @@ bool Paddle::IsBallColliding(Ball& ball)
 			}
 			else
 			{
-				dir = Vec2( xdiff * 0.0045, -1.0f );
+				dir = Vec2( xdiff * exitXfactor, -1.0f );
 			}
 			
 			ball.SetDirection( dir );

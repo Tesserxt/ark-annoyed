@@ -171,6 +171,10 @@ void Game::UpdateModel( float dt )
 
 void Game::ComposeFrame()
 {
+	gfx.DrawIsoRightTriUL(300, 300, 10, Colors::Gray);
+	gfx.DrawIsoRightTriUR(500, 300, 10, Colors::Gray);
+	gfx.DrawIsoRightTriBL(300, 500, 10, Colors::Gray);
+	gfx.DrawIsoRightTriBR(500, 500, 10, Colors::Gray);
 	SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
 	for (Brick& b : brick)
 	{

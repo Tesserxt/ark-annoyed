@@ -26,6 +26,7 @@ private:
 	float vel = 300.0f;
 	float halfwidth;
 	float halfheight;
+
 	float maxExitRatio = 1.0f;
 	float fixedZoneWidthRatio = 0.3;
 

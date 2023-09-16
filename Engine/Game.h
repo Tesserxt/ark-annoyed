@@ -57,7 +57,7 @@ private:
 	static constexpr int nBricksAcross = 7;
 	static constexpr int nBricksDown = 5;
 	static constexpr int nBricks = nBricksAcross * nBricksDown;
-	static constexpr int nObstacles = 10;
+	static constexpr int nObstacles = 20;
 	int nBricksDestroyed = 0;
 
 	float dim = 24.0f; // poo dimension 24*24

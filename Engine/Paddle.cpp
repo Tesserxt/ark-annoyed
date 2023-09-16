@@ -1,10 +1,13 @@
 #include "Paddle.h"
 #include <iostream>
-Paddle::Paddle( Vec2& in_pos, float in_halfwidth, float in_halfheight)
+Paddle::Paddle(Vec2& in_pos, float in_halfwidth, float in_halfheight)
 	:
 	pos(in_pos),
 	halfwidth(in_halfwidth),
-	halfheight(in_halfheight)
+	halfheight(in_halfheight),
+	exitXfactor(maxExitRatio / halfwidth),
+	fixedZoneHalfwidth(fixedZoneWidthRatio* halfwidth),
+	fixedZoneExitX(exitXfactor * fixedZoneHalfwidth)
 {
 }
 
@@ -53,33 +56,29 @@ bool Paddle::IsBallColliding(Ball& ball)
 		{
 			ball.ReboundY();
 			const float xdiff = ball.GetPos().x - pos.x;
-			float fixedXcomponent = fixedZoneHalfwidth * exitXfactor;
+
 			Vec2 dir;
 			if (std::abs(xdiff) < fixedZoneHalfwidth)
 			{
 				if (xdiff < 0.0f)
 				{
-					dir = Vec2( -fixedXcomponent, -10.0f );
+					dir = Vec2( -fixedZoneExitX, -1.0f );
 				}
 				else
 				{
-					dir = Vec2( fixedXcomponent,  -10.0f );
+					dir = Vec2( fixedZoneExitX,  -1.0f );
 				}
 			}
 			else
 			{
-				dir = Vec2( xdiff * exitXfactor, -10.0f );
+				dir = Vec2( xdiff * 0.0045, -1.0f );
 			}
 			
 			ball.SetDirection( dir );
-			
-			
-			//ball.SetvelX();
 		}
 		else
 		{
 			ball.ReboundX();
-			
 		}
 		cooldown = true;
 		return true;

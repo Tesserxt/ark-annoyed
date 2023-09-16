@@ -21,4 +21,5 @@ private:
 	Vec2 pos;
 	Vec2 vel;
 	float apothem = 10.0f;
+	bool cooldown = false;
 };

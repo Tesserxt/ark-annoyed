@@ -1,6 +1,6 @@
 #include "Beveler.h"
 
-void Beveler::DrawInnerBevel(RectF& rect, int size, Graphics& gfx)
+void Beveler::DrawOuterBevel(const RectF& rect, int size, Graphics& gfx) const
 {
 	const int left	  = int(rect.left );
 	const int right	  = int(rect.right );
@@ -29,6 +29,30 @@ void Beveler::DrawInnerBevel(RectF& rect, int size, Graphics& gfx)
 
 }
 
+void Beveler::DrawInnerBevel(const RectF& rect, int size, Graphics& gfx) const
+{
+	const int left = int(rect.left);
+	const int right = int(rect.right);
+	const int top = int(rect.top);
+	const int bottom = int(rect.bottom);
+	// left side bevel (corner,side,corner)
+	gfx.DrawIsoRightTriBL(left, top, size, rightcolor);
+	gfx.DrawRect(left, top + size, left + size, bottom - size, rightcolor);
+	gfx.DrawIsoRightTriUL(left, bottom - size, size, rightcolor);
+	// top side bevel
+	gfx.DrawIsoRightTriUR(left, top, size, bottomcolor);
+	gfx.DrawRect(left + size, top, right - size, top + size, bottomcolor);
+	gfx.DrawIsoRightTriUL(right - size, top, size, bottomcolor);
+	// right side bevel
+	gfx.DrawIsoRightTriBR(right - size, top, size, leftcolor);
+	gfx.DrawRect(right - size, top + size, right, bottom - size, leftcolor);
+	gfx.DrawIsoRightTriUR(right - size, bottom - size, size, leftcolor);
+	// bottom side bevel
+	gfx.DrawIsoRightTriBR(left, bottom - size, size, topcolor);
+	gfx.DrawRect(left + size, bottom - size, right - size, bottom, topcolor);
+	gfx.DrawIsoRightTriBL(right - size, bottom - size, size, topcolor);
+}
+
 void Beveler::SetBaseColor(Color in_base)
 {
 	baseColor = in_base;
@@ -55,7 +79,7 @@ void Beveler::SetBaseColor(Color in_base)
 
 void Beveler::DrawBeveledBrick(RectF& rect, int bevelsize, Graphics& gfx)
 {
-	DrawInnerBevel(rect, bevelsize, gfx);
+	DrawOuterBevel(rect, bevelsize, gfx);
 	gfx.DrawRect(rect.GetExpanded( -bevelsize ), baseColor);
 }
 

@@ -5,8 +5,8 @@
 class Beveler
 {
 public:
-	void DrawInnerBevel(RectF& rect, int size, Graphics& gfx);
-	void DrawOuterBevel(RectF& rect, int size, Graphics& gfx);
+	void DrawInnerBevel(const RectF& rect, int size, Graphics& gfx) const;
+	void DrawOuterBevel(const RectF& rect, int size, Graphics& gfx) const;
 	void SetBaseColor(Color in_base);
 	void DrawBeveledBrick(RectF& rect, int bevelsize, Graphics& gfx);
 private:

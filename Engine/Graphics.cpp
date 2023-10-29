@@ -252,6 +252,11 @@ Graphics::~Graphics()
 	if( pImmediateContext ) pImmediateContext->ClearState();
 }
 
+RectF Graphics::GetScreenRect()
+{
+	return RectF(0.0f, float( ScreenWidth ), 0.0f, float( ScreenHeight ) );
+}
+
 void Graphics::EndFrame()
 {
 	HRESULT hr;
@@ -353,55 +358,103 @@ void Graphics::DrawCircle( int x,int y,int radius,Color c )
 	}
 }
 
+//void Graphics::DrawIsoRightTriUL(int x, int y, int size, Color c)
+//{
+//	int sizeY = size;
+//	for (int y_loop = y; y_loop < y + sizeY; y_loop++)
+//	{
+//		for (int x_loop = x; x_loop < x + size; x_loop++)
+//		{
+//			PutPixel(x_loop, y_loop, c);
+//			
+//		}size--;
+//	}	
+//}
+//
+//void Graphics::DrawIsoRightTriUR(int x, int y, int size, Color c)
+//{
+//	int sizeY = size;
+//	for (int y_loop = y; y_loop < y + sizeY; y_loop++)
+//	{
+//		for (int x_loop = x - size; x_loop < x; x_loop++)
+//		{
+//			PutPixel(x_loop, y_loop, c);
+//
+//		}size--;
+//	}
+//}
+//
+//void Graphics::DrawIsoRightTriBL(int x, int y, int size, Color c)
+//{
+//	int sizeY = size;
+//	for (int y_loop = y; y_loop > y - sizeY; y_loop--)
+//	{
+//		for (int x_loop = x; x_loop < x + size; x_loop++)
+//		{
+//			PutPixel(x_loop, y_loop, c);
+//
+//		}size--;
+//	}
+//}
+//
+//void Graphics::DrawIsoRightTriBR(int x, int y, int size, Color c)
+//{
+//	int sizeY = size;
+//	for (int y_loop = y; y_loop > y - sizeY; y_loop--)
+//	{
+//		for (int x_loop = x; x_loop > x - size; x_loop--)
+//		{
+//			PutPixel(x_loop, y_loop, c);
+//
+//		}size--;
+//	}
+//}
+
 void Graphics::DrawIsoRightTriUL(int x, int y, int size, Color c)
 {
-	int sizeY = size;
-	for (int y_loop = y; y_loop < y + sizeY; y_loop++)
+	for (int loop_y = y; loop_y < y + size; loop_y++)
 	{
-		for (int x_loop = x; x_loop < x + size; x_loop++)
+		const int cur_line = loop_y - y;
+		for (int loop_x = x; loop_x < x + size - cur_line; loop_x++)
 		{
-			PutPixel(x_loop, y_loop, c);
-			
-		}size--;
-	}	
+			PutPixel(loop_x, loop_y, c);
+		}
+	}
 }
 
 void Graphics::DrawIsoRightTriUR(int x, int y, int size, Color c)
 {
-	int sizeY = size;
-	for (int y_loop = y; y_loop < y + sizeY; y_loop++)
+	for (int loop_y = y; loop_y < y + size; loop_y++)
 	{
-		for (int x_loop = x - size; x_loop < x; x_loop++)
+		const int cur_line = loop_y - y;
+		for (int loop_x = x + cur_line; loop_x < x + size; loop_x++)
 		{
-			PutPixel(x_loop, y_loop, c);
-
-		}size--;
+			PutPixel(loop_x, loop_y, c);
+		}
 	}
 }
 
 void Graphics::DrawIsoRightTriBL(int x, int y, int size, Color c)
 {
-	int sizeY = size;
-	for (int y_loop = y; y_loop > y - sizeY; y_loop--)
+	for (int loop_y = y; loop_y < y + size; loop_y++)
 	{
-		for (int x_loop = x; x_loop < x + size; x_loop++)
+		const int cur_line = loop_y - y;
+		for (int loop_x = x; loop_x < x + cur_line; loop_x++)
 		{
-			PutPixel(x_loop, y_loop, c);
-
-		}size--;
+			PutPixel(loop_x, loop_y, c);
+		}
 	}
 }
 
 void Graphics::DrawIsoRightTriBR(int x, int y, int size, Color c)
 {
-	int sizeY = size;
-	for (int y_loop = y; y_loop > y - sizeY; y_loop--)
+	for (int loop_y = y; loop_y < y + size; loop_y++)
 	{
-		for (int x_loop = x; x_loop > x - size; x_loop--)
+		const int cur_line = loop_y - y;
+		for (int loop_x = x + size - cur_line; loop_x < x + size; loop_x++)
 		{
-			PutPixel(x_loop, y_loop, c);
-
-		}size--;
+			PutPixel(loop_x, loop_y, c);
+		}
 	}
 }
 

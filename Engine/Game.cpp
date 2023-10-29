@@ -39,11 +39,10 @@ Game::Game( MainWindow& wnd )
 	
 {
 	Vec2  topleft(topleftX, 50 );
-	Color Colors[nBricksDown] = { Colors::Red, Colors::Green, Colors::Blue,Colors::Yellow, Colors::Cyan };
 	int i = 0;
 	for (int y = 0; y < nBricksDown; y++)
 	{
-		Color c = Colors[y];
+		Color c = brickColors[y];
 		for (int x = 0; x < nBricksAcross; x++)
 		{
 			Vec2 pos = topleft + Vec2(x * brickwidth, y * brickheight);
@@ -57,6 +56,7 @@ Game::Game( MainWindow& wnd )
 	{
 		obstacle[i] = Obstacle(Vec2( xDist( rng ), yDist( rng ) ), Vec2(60.0f / 2.0f * 0.0f, 60.0f * 1.0f));
 	}
+	brk = Brick(RectF(50, 150, 50, 100), Colors::LightGray);
 }
 
 void Game::Go()
@@ -171,16 +171,25 @@ void Game::UpdateModel( float dt )
 
 void Game::ComposeFrame()
 {
+	brk.Draw(gfx);
 	gfx.DrawIsoRightTriUL(300, 300, 10, Colors::Gray);
 	gfx.DrawIsoRightTriUR(500, 300, 10, Colors::Gray);
 	gfx.DrawIsoRightTriBL(300, 500, 10, Colors::Gray);
 	gfx.DrawIsoRightTriBR(500, 500, 10, Colors::Gray);
+
+	
+
+
 	SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);
 	}
+
 	
+	
+	
+
 	if (GameStart && lives > 0 && !GameOver)
 	{
 		pad.Draw(gfx);

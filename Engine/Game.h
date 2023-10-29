@@ -31,6 +31,7 @@
 #include "Paddle.h"
 #include "SpriteCodex.h"
 #include "Obstacle.h"
+#include "Beveler.h"
 #include <random>
 
 class Game
@@ -58,6 +59,7 @@ private:
 	static constexpr int nBricksDown = 5;
 	static constexpr int nBricks = nBricksAcross * nBricksDown;
 	static constexpr int nObstacles = 20;
+	static constexpr Color brickColors[nBricksDown] = { {230, 0, 0}, {0, 230, 0}, {0, 0, 230}, {230, 230, 0}, {0, 230, 230} };
 	int nBricksDestroyed = 0;
 
 	float dim = 24.0f; // poo dimension 24*24
@@ -77,13 +79,14 @@ private:
 	Sound soundobstacle;
 	Sound soundgameover;
 	Sound soundObstacle;
+	Beveler bvl;
 
 	std::mt19937 rng;
 	bool GameOver = false;
 	bool GameStart = false;
 	int x = 0; int i = 0;
 	int lives = 30;
-
+	Brick brk;
 	
 	
 

@@ -6,13 +6,14 @@ Brick::Brick( const RectF & rect_in,Color color_in )
 	rect( rect_in ),
 	color( color_in )
 {
+	bevel.SetBaseColor(color);
 }
 
-void Brick::Draw( Graphics & gfx ) const
+void Brick::Draw( Graphics & gfx )
 {
 	if (!destroyed)
 	{
-		gfx.DrawRect(rect.GetExpanded( -padding ), color);
+		bevel.DrawBeveledBrick(rect.GetExpanded( -padding ), bevelsize, gfx);
 	}
 }
 

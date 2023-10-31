@@ -33,7 +33,7 @@ void Ball::ReboundY()
 	vel.y = -vel.y;
 }
 
-bool Ball::isGameOver(RectF& walls, int& lives)
+bool Ball::isGameOver(const RectF& walls, int& lives)
 {
 	if (GetPos().y + 7.0f >= walls.bottom)
 	{
@@ -63,7 +63,7 @@ void Ball::SetDirection(Vec2& dir)
 	vel = dir.GetNormalized() * speed;
 }
 
-bool Ball::IsColliding(RectF& walls)
+bool Ball::IsColliding(const RectF& walls)
 {
 	RectF ball = GetRect();
 	bool collided = false;

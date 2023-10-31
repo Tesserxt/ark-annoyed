@@ -53,7 +53,7 @@ bool Obstacle::IsBallColliding(Ball& Ball)
 	return false;
 }
 
-bool Obstacle::IsWallColliding(RectF& walls)
+bool Obstacle::IsWallColliding( const RectF& walls)
 {
 	if (!destroyed)
 	{

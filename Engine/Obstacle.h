@@ -13,7 +13,7 @@ public:
 	RectF GetRect();
 	void Update(float dt);
 	bool IsBallColliding(Ball& ball);
-	bool IsWallColliding(RectF& walls);
+	bool IsWallColliding( const RectF& walls);
 	bool IsPadColliding(RectF& pad);
 	void Rebound( float rate);
 	bool destroyed = false;

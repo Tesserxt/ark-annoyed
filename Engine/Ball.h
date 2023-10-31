@@ -11,11 +11,11 @@ public:
 	Ball(Vec2& in_pos, Vec2& in_dir);
 	void Update( float dt );
 	void Draw( Graphics& gfx );
-	bool IsColliding(RectF& walls);
+	bool IsColliding( const RectF& walls);
 	void ReboundX();
 	void SetvelX();
 	void ReboundY();
-	bool isGameOver(RectF& walls, int& lives);
+	bool isGameOver( const RectF& walls, int& lives);
 	RectF GetRect();
 	Vec2 GetVel();
 	Vec2 GetPos();

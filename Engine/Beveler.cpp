@@ -79,7 +79,7 @@ void Beveler::SetBaseColor(Color in_base)
 
 void Beveler::DrawBeveledBrick(RectF& rect, int bevelsize, Graphics& gfx)
 {
-	DrawOuterBevel(rect, bevelsize, gfx);
+	DrawInnerBevel(rect, bevelsize, gfx);
 	gfx.DrawRect(rect.GetExpanded( -bevelsize ), baseColor);
 }
 

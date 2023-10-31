@@ -32,6 +32,7 @@
 #include "SpriteCodex.h"
 #include "Obstacle.h"
 #include "Beveler.h"
+#include "Walls.h"
 #include <random>
 
 class Game
@@ -70,7 +71,6 @@ private:
 
 	FrameTimer ft;
 	Ball ball;
-	RectF walls;
 	Brick brick[nBricks];
 	Paddle pad;
 	Obstacle obstacle[nObstacles];
@@ -80,6 +80,7 @@ private:
 	Sound soundgameover;
 	Sound soundObstacle;
 	Beveler bvl;
+	Walls walls;
 
 	std::mt19937 rng;
 	bool GameOver = false;

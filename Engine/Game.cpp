@@ -27,7 +27,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -1.0f) ),
-	walls( brdx + dim, brdx + dim*brdwidth, dim, dim*dim ),
+	walls( RectF(brdx + dim, brdx + dim*brdwidth, dim, dim*dim), 0.0f, Colors::Cyan),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
 	
@@ -38,6 +38,7 @@ Game::Game( MainWindow& wnd )
 	soundObstacle( L"Sounds\\obstacle.wav")
 	
 {
+	
 	Vec2  topleft(topleftX, 50 );
 	int i = 0;
 	for (int y = 0; y < nBricksDown; y++)
@@ -119,7 +120,7 @@ void Game::UpdateModel( float dt )
 		}
 
 		pad.Update(wnd.kbd, dt);
-		pad.IsWallColliding(walls);
+		pad.IsWallColliding(walls.GetInnerBounds());
 		ball.Update(dt);	
 		int i = x;
 		if( i == x )
@@ -129,7 +130,7 @@ void Game::UpdateModel( float dt )
 			{	
 				pad.ResetCoolDown();
 			}
-			if (obstacle[x].IsWallColliding(walls))
+			if (obstacle[x].IsWallColliding(walls.GetInnerBounds()))
 			{
 				x++;
 			}
@@ -150,10 +151,10 @@ void Game::UpdateModel( float dt )
 		{
 			soundpad.Play();
 		}
-		if (ball.IsColliding(walls))
+		if (ball.IsColliding(walls.GetInnerBounds()))
 		{
-			GameOver = ball.isGameOver(walls, lives);
-			if (ball.GetPos().y + 7.0f >= walls.bottom)
+			GameOver = ball.isGameOver(walls.GetInnerBounds(), lives);
+			if (ball.GetPos().y + 7.0f >= walls.GetInnerBounds().bottom)
 			{
 				soundgameover.Play();
 				GameStart = false;
@@ -177,10 +178,11 @@ void Game::ComposeFrame()
 	gfx.DrawIsoRightTriBL(300, 500, 10, Colors::Gray);
 	gfx.DrawIsoRightTriBR(500, 500, 10, Colors::Gray);
 
-	
+	bvl.SetBaseColor({ 230, 0, 230 });
+	bvl.DrawBevelFrame(walls.GetInnerBounds(), 4, gfx);
 
 
-	SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
+	//SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);

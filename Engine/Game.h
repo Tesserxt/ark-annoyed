@@ -70,6 +70,7 @@ private:
 	float topleftX = (brd - (brickwidth * float(nBricksAcross))) / 2.0f;
 
 	FrameTimer ft;
+	Walls walls;
 	Ball ball;
 	Brick brick[nBricks];
 	Paddle pad;
@@ -80,7 +81,7 @@ private:
 	Sound soundgameover;
 	Sound soundObstacle;
 	Beveler bvl;
-	Walls walls;
+	
 
 	std::mt19937 rng;
 	bool GameOver = false;

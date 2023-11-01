@@ -31,9 +31,9 @@ void Beveler::DrawOuterBevel(const RectF& rect, int size, Graphics& gfx) const
 
 void Beveler::DrawInnerBevel(const RectF& rect, int size, Graphics& gfx) const
 {
-	const int left = int(rect.left);
-	const int right = int(rect.right);
-	const int top = int(rect.top);
+	const int left   = int(rect.left);
+	const int right  = int(rect.right);
+	const int top    = int(rect.top);
 	const int bottom = int(rect.bottom);
 	// left side bevel (corner,side,corner)
 	gfx.DrawIsoRightTriBL(left, top, size, rightcolor);

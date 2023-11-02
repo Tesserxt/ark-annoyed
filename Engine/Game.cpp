@@ -27,7 +27,7 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	ball(Vec2(410.0f, 480.0f),  Vec2( 0, -1.0f) ),
-	walls( RectF(brdx + dim, brdx + dim*brdwidth, dim, dim*dim), 4.0f, {230, 0, 230}),
+	walls( RectF(brdx + dim, brdx + dim*brdwidth, dim, dim*dim), 8.0f, {230, 0, 230}),
 	pad( Vec2( 410.0f, 500.0f), 50.0f, 10.0f),
 	rng(std::random_device()()),
 	
@@ -35,7 +35,8 @@ Game::Game( MainWindow& wnd )
 	soundbrick( L"Sounds\\arkbrick.wav"),
 	soundobstacle( L"Sounds\\fart1.wav"),
 	soundgameover( L"Sounds\\arkGameOver.wav"),
-	soundObstacle( L"Sounds\\obstacle.wav")
+	soundObstacle( L"Sounds\\obstacle.wav"),
+	soundGameStart( L"Sounds\\GameStart.wav")
 	
 {
 	
@@ -168,6 +169,13 @@ void Game::UpdateModel( float dt )
 			}
 		}
 	}
+
+	//soundGameStart.StopOne();
+	else if( GameStage )
+	{
+		soundGameStart.Play();
+		GameStage = false;
+	}
 }
 
 void Game::ComposeFrame()
@@ -183,6 +191,12 @@ void Game::ComposeFrame()
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);
+	}
+
+	if (!GameStart)
+	{
+		SpriteCodex::DrawReady(Graphics::GetScreenRect().GetCenter(), gfx);
+		//soundGameStart.Play();
 	}
 
 	if (GameStart && lives > 0 && !GameOver)

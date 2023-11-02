@@ -13,4 +13,6 @@ public:
 	static void DrawFace(const Vec2& center, Graphics& gfx);
 	static void DrawPooBoard(const int x, const int width, Graphics& gfx);
 	static void DrawTitleScreen(int x, int y, Graphics& gfx);
-};
+	static void DrawTitle(const Vec2& center, Graphics& gfx);
+	static void	DrawReady(const Vec2& center, Graphics& gfx);
+};				

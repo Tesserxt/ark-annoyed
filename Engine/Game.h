@@ -87,10 +87,11 @@ private:
 	std::mt19937 rng;
 	bool GameOver = false;
 	bool GameStart = false;
-	bool GameStage = true;
 	int Sound = 0;
 	int x = 0; int i = 0;
-	int lives = 30;
+	int lives = 3;
+	bool Ready = false;
+	bool inhibitReturn = false;
 	Brick brk;
 	
 	

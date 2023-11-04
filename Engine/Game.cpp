@@ -78,12 +78,19 @@ void Game::Go()
 
 void Game::UpdateModel( float dt )
 {	
-	Vec2 a(50,-1);
-	a.Normalize();
-	if (wnd.kbd.KeyIsPressed(VK_RETURN))
+	if (wnd.kbd.KeyIsPressed(VK_RETURN) && !inhibitReturn)
 	{
 		GameStart = true;
+		Ready = true;
+		inhibitReturn = true;
 	}
+
+	if (inhibitReturn)
+	{
+		soundGameStart.Play();
+		inhibitReturn = false;
+	}
+
 	if (!GameOver && GameStart && !(nBricksDestroyed == nBricks) )
 	{	
 		bool collisionHappend = false;
@@ -157,7 +164,8 @@ void Game::UpdateModel( float dt )
 			GameOver = ball.isGameOver(walls.GetInnerBounds(), lives);
 			if (ball.GetPos().y + 7.0f >= walls.GetInnerBounds().bottom)
 			{
-				soundgameover.Play();
+				soundgameover.Play(); 
+				inhibitReturn = false;
 				GameStart = false;
 				ball = Ball(Vec2(410.0f, 480.0f), Vec2( 0, -1.0f ));
 				pad  = Paddle(Vec2(410.0f, 500.0f), 50.0f, 10.0f);
@@ -169,34 +177,20 @@ void Game::UpdateModel( float dt )
 			}
 		}
 	}
-
-	//soundGameStart.StopOne();
-	else if( GameStage )
-	{
-		soundGameStart.Play();
-		GameStage = false;
-	}
 }
 
 void Game::ComposeFrame()
 {
-	brk.Draw(gfx);
-	gfx.DrawIsoRightTriUL(300, 300, 10, Colors::Gray);
-	gfx.DrawIsoRightTriUR(500, 300, 10, Colors::Gray);
-	gfx.DrawIsoRightTriBL(300, 500, 10, Colors::Gray);
-	gfx.DrawIsoRightTriBR(500, 500, 10, Colors::Gray);
-
 	walls.Draw(gfx);
 	//SpriteCodex::DrawPooBoard( brdx, brdwidth, gfx);
 	for (Brick& b : brick)
 	{
 		b.Draw(gfx);
 	}
-
-	if (!GameStart)
+	
+	if (!GameStart && !GameOver)
 	{
 		SpriteCodex::DrawReady(Graphics::GetScreenRect().GetCenter(), gfx);
-		//soundGameStart.Play();
 	}
 
 	if (GameStart && lives > 0 && !GameOver)
